@@ -1,5 +1,7 @@
 package com.kujojoshua.gestor_tareas_api.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +24,10 @@ public class TareaService {
         Tarea tareaGuardada=tareaRepository.save(tarea);
         return tareaGuardada;
     }
+
+    @Transactional
+    public List<Tarea> mostrarTodas(){
+        List<Tarea> tareas= tareaRepository.findAll();
+        return tareas;
+    } 
 }
