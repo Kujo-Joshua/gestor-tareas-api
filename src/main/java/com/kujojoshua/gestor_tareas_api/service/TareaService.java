@@ -49,7 +49,7 @@ public class TareaService {
     @Transactional
     public TareaDTO buscarTareaPorId(Long id){
         Tarea tareaEncontrada= tareaRepository.findById(id)
-        .orElseThrow(()-> new ResourceNotFoundException("usuario no encontrado con el id: "+id));
+        .orElseThrow(()-> new ResourceNotFoundException("Tarea no encontrado con el id: "+id));
         return convertirADTO(tareaEncontrada);
     }
 }
