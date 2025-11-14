@@ -9,6 +9,8 @@ import com.kujojoshua.gestor_tareas_api.service.TareaService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -22,10 +24,10 @@ public class TareasController {
     private final TareaService tareaService;
 
 
-    @PostMapping("/crear")
-    public Tarea crearTarea(@RequestBody TareaDTO tareaDTO ) {
+    @PostMapping
+    public ResponseEntity<Tarea> crearTarea(@RequestBody TareaDTO tareaDTO ) {
         Tarea tareaGuardada=tareaService.crearTarea(tareaDTO);
-        return tareaGuardada;
+        return ResponseEntity.status(HttpStatus.CREATED).body(tareaGuardada);
     }
     
     
