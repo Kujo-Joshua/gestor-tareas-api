@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kujojoshua.gestor_tareas_api.dto.TareaDTO;
-import com.kujojoshua.gestor_tareas_api.model.Tarea;
 import com.kujojoshua.gestor_tareas_api.service.TareaService;
 
 import lombok.RequiredArgsConstructor;
@@ -14,8 +13,10 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -26,17 +27,26 @@ public class TareasController {
 
     private final TareaService tareaService;
 
+    
 
     @PostMapping
-    public ResponseEntity<Tarea> crearTarea(@RequestBody TareaDTO tareaDTO ) {
-        Tarea tareaGuardada=tareaService.crearTarea(tareaDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(tareaGuardada);
+    public ResponseEntity<TareaDTO> crearTarea(@RequestBody TareaDTO tareaDTO ) {
+        tareaDTO=tareaService.crearTarea(tareaDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(tareaDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<Tarea>> listaTodas(){
-        List<Tarea> tareas=tareaService.mostrarTodas();
-        return ResponseEntity.status(HttpStatus.OK).body(tareas);
+    public ResponseEntity<List<TareaDTO>> listaTodas(){
+        List<TareaDTO> tareaDTOs= tareaService.mostrarTodas();
+
+        return ResponseEntity.status(HttpStatus.OK).body(tareaDTOs);
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<TareaDTO> getTareaPorId(@PathVariable("id") Long idTarea) {
+        TareaDTO tareaEncontrada=tareaService.buscarTareaPorId(idTarea);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(tareaEncontrada);
     }
     
     
