@@ -1,16 +1,21 @@
 package com.kujojoshua.gestor_tareas_api.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Data
+
+
 @Entity
+@NoArgsConstructor
 public class Tarea {
-    @Getter @Id
-    private final Long id;
+    
+    @Getter @Id @GeneratedValue(strategy = GenerationType.IDENTITY)//se genera autoincremental
+    private Long id;
 
     @Getter @Setter
     private String titulo;
@@ -19,7 +24,7 @@ public class Tarea {
     private String descripcion;
 
     @Getter @Setter
-    private boolean completada;
+    private boolean completada=false;
 
 
 }
