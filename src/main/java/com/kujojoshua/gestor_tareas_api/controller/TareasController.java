@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kujojoshua.gestor_tareas_api.dto.TareaDTO;
 import com.kujojoshua.gestor_tareas_api.service.TareaService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class TareasController {
     private final TareaService tareaService;
 
     @PutMapping("/{id}")
-    public ResponseEntity<TareaDTO> updateTarea(@PathVariable Long id, @RequestBody TareaDTO tareaDTO){
+    public ResponseEntity<TareaDTO> updateTarea(@Valid @PathVariable Long id, @RequestBody TareaDTO tareaDTO){
         
         TareaDTO tareaActualizada=tareaService.actualizarTarea(id, tareaDTO);
         return ResponseEntity.status(HttpStatus.OK).body(tareaActualizada);
@@ -44,8 +45,9 @@ public class TareasController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    
     @PostMapping
-    public ResponseEntity<TareaDTO> crearTarea(@RequestBody TareaDTO tareaDTO ) {
+    public ResponseEntity<TareaDTO> crearTarea(@Valid @RequestBody TareaDTO tareaDTO ) {
         tareaDTO=tareaService.crearTarea(tareaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(tareaDTO);
     }
