@@ -33,7 +33,7 @@ public class TareaService {
     @Transactional
     public void eliminarTareaPorId(Long id){
         Tarea tareaAEliminar=tareaRepository.findById(id)
-        .orElseThrow(()->new ResourceNotFoundException("La tarea con el id: "+id+ " No fue encontrado"));
+        .orElseThrow(()->new ResourceNotFoundException("La tarea con el id: "+id+ " No fue encontrada"));
         tareaRepository.delete(tareaAEliminar);
     }
 
@@ -49,7 +49,7 @@ public class TareaService {
     @Transactional
     public TareaDTO actualizarTarea(Long id, TareaDTO tareaDTO){
         Tarea tarea= tareaRepository.findById(id)
-        .orElseThrow(()-> new ResourceNotFoundException("Tarea no encontrada con el id: "+id));
+        .orElseThrow(()-> new ResourceNotFoundException("La tarea con el id: "+id+ " No fue encontrada"));
         tarea.setTitulo(tareaDTO.getTitulo());
         tarea.setDescripcion(tareaDTO.getDescripcion());
         tarea.setCompletada(tareaDTO.isCompletada());
@@ -66,7 +66,7 @@ public class TareaService {
     @Transactional
     public TareaDTO buscarTareaPorId(Long id){
         Tarea tareaEncontrada= tareaRepository.findById(id)
-        .orElseThrow(()-> new ResourceNotFoundException("Tarea no encontrada con el id: "+id));
+        .orElseThrow(()-> new ResourceNotFoundException("La tarea con el id: "+id+ " No fue encontrada"));
         return convertirADTO(tareaEncontrada);
     }
 }
