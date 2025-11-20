@@ -52,4 +52,4 @@ El proyecto incluye pruebas unitarias utilizando **JUnit 5** y **Mockito** para 
 ---
 **Autor:** Joshua Murguia  
 *Software Engineering Student looking for Internship Opportunities.*
-[LinkedIn](Tu Link Aquí)
+[LinkedIn](https://www.linkedin.com/in/joshua-abad-murguia-garcia-542a17288/)
