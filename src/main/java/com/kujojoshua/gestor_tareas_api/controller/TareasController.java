@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +40,14 @@ public class TareasController {
 
     }
 
+    @GetMapping
+    public ResponseEntity<List<TareaDTO>> listarTareas(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username= auth.getName();
+        List<TareaDTO> tareasObtenidas = tareaService.obtenerTareasPorUsuario(username);
+        return ResponseEntity.status(HttpStatus.OK).body(tareasObtenidas);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTarea(@PathVariable Long id){
@@ -48,17 +58,19 @@ public class TareasController {
     
     @PostMapping
     public ResponseEntity<TareaDTO> crearTarea(@Valid @RequestBody TareaDTO tareaDTO ) {
-        tareaDTO=tareaService.crearTarea(tareaDTO);
+        Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        tareaDTO=tareaService.crearTarea(tareaDTO, username);
         return ResponseEntity.status(HttpStatus.CREATED).body(tareaDTO);
     }
 
-    @GetMapping
+    /*@GetMapping
     public ResponseEntity<List<TareaDTO>> listaTodas(){
         List<TareaDTO> tareaDTOs= tareaService.mostrarTodas();
 
         return ResponseEntity.status(HttpStatus.OK).body(tareaDTOs);
     }
-    
+    */
     @GetMapping("/{id}")
     public ResponseEntity<TareaDTO> getTareaPorId(@PathVariable("id") Long idTarea) {
         TareaDTO tareaEncontrada=tareaService.buscarTareaPorId(idTarea);

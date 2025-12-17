@@ -2,21 +2,29 @@ package com.kujojoshua.gestor_tareas_api.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.kujojoshua.gestor_tareas_api.Exception.ResourceNotFoundException;
 import com.kujojoshua.gestor_tareas_api.dto.TareaDTO;
 import com.kujojoshua.gestor_tareas_api.model.Tarea;
+import com.kujojoshua.gestor_tareas_api.model.Usuario;
 import com.kujojoshua.gestor_tareas_api.repository.TareaRepository;
+import com.kujojoshua.gestor_tareas_api.repository.UsuarioRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class TareaService {
     @Autowired
-    TareaRepository tareaRepository;
+    private TareaRepository tareaRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
 
     private TareaDTO convertirADTO(Tarea tarea){
         return new TareaDTO(tarea.getId(), tarea.getTitulo(), tarea.getDescripcion(), tarea.isCompletada());
@@ -38,11 +46,18 @@ public class TareaService {
     }
 
     @Transactional
-    public TareaDTO crearTarea(TareaDTO tareaDTO){
+    public TareaDTO crearTarea(TareaDTO tareaDTO, String username){
+        Usuario usuario= usuarioRepository.findByUsername(username)
+        .or(()-> usuarioRepository.findByEmail(username))
+        .orElseThrow(()->new UsernameNotFoundException("Usuario no encontrado: " + username));
+    
+
         Tarea tarea=new Tarea();
         tarea.setTitulo(tareaDTO.getTitulo());
         tarea.setDescripcion(tareaDTO.getDescripcion());
+        tarea.setUsuario(usuario);
         Tarea tareaGuardada=tareaRepository.save(tarea);
+        
         return convertirADTO(tareaGuardada);
     }
 
@@ -62,6 +77,17 @@ public class TareaService {
         
         return tareasADTO(tareas);
     } 
+
+    @Transactional
+    public List<TareaDTO> obtenerTareasPorUsuario(String username){
+        Usuario usuario= usuarioRepository.findByUsername(username)
+        .or(()->usuarioRepository.findByEmail(username))
+        .orElseThrow(()-> new UsernameNotFoundException("usuario no encontrado"));
+
+        List<Tarea> tareas =tareaRepository.findByUsuarioId(usuario.getId());
+
+        return tareas.stream().map(this::convertirADTO).collect(Collectors.toList());
+    }
 
     @Transactional
     public TareaDTO buscarTareaPorId(Long id){
